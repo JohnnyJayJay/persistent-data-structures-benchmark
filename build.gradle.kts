@@ -16,3 +16,8 @@ dependencies {
     jmh("org.clojure", "clojure", "1.10.3")
     jmh("org.pcollections", "pcollections", "3.1.4")
 }
+
+jmh {
+    fork.set(3)
+    forceGC.set(true)
+}
