@@ -1,9 +1,10 @@
 package com.github.johnnyjayjay.benchmarks;
 
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 public final class RandomString {
+
+    private static final Random RANDOM = new Random();
 
     private static final int MIN_LENGTH = 1;
     private static final int MAX_LENGTH = 42;
@@ -22,21 +23,31 @@ public final class RandomString {
 
     }
 
+    public static String[] shuffledElements() {
+        String[] shuffled = ELEMENTS.clone();
+        for (int i = 0; i < SIZE; i++) {
+            int swapIndex = randomIndex();
+            String temp = shuffled[swapIndex];
+            shuffled[swapIndex] = shuffled[i];
+            shuffled[i] = temp;
+        }
+        return shuffled;
+    }
+
     public static int randomIndex() {
-        return ThreadLocalRandom.current().nextInt(SIZE);
+        return RANDOM.nextInt(SIZE);
     }
 
     public static String randomElement() {
-        return ELEMENTS[ThreadLocalRandom.current().nextInt(SIZE)];
+        return ELEMENTS[randomIndex()];
     }
 
     public static String create() {
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        int length = random.nextInt(MIN_LENGTH, MAX_LENGTH);
+        int length = RANDOM.nextInt(MAX_LENGTH - MIN_LENGTH) + MIN_LENGTH;
         StringBuilder builder = new StringBuilder();
         int bound = ALPHABET.length;
         for (int i = 0; i < length; i++) {
-            builder.append(ALPHABET[random.nextInt(bound)]);
+            builder.append(ALPHABET[RANDOM.nextInt(bound)]);
         }
         return builder.toString();
     }
