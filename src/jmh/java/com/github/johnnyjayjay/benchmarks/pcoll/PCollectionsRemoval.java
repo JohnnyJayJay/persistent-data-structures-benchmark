@@ -3,6 +3,7 @@ package com.github.johnnyjayjay.benchmarks.pcoll;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
@@ -24,6 +25,7 @@ import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
+@Measurement(time = 5)
 public class PCollectionsRemoval {
 
     @State(Scope.Thread)

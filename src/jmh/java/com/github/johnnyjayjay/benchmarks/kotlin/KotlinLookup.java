@@ -24,6 +24,7 @@ import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
+@Measurement(iterations = 3)
 public class KotlinLookup {
 
     @State(Scope.Benchmark)

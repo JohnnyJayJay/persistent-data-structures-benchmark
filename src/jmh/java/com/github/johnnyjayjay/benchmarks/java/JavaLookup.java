@@ -3,6 +3,7 @@ package com.github.johnnyjayjay.benchmarks.java;
 import com.github.johnnyjayjay.benchmarks.RandomString;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OperationsPerInvocation;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -26,6 +27,7 @@ import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
+@Measurement(iterations = 3)
 public class JavaLookup {
 
     @State(Scope.Benchmark)
