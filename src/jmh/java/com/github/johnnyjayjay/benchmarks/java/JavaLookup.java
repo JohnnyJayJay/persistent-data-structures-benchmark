@@ -30,7 +30,7 @@ import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 @Measurement(iterations = 3)
 public class JavaLookup {
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class ArrayListState {
         ArrayList<String> arrayList;
 
@@ -45,7 +45,7 @@ public class JavaLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class LinkedListState {
         LinkedList<String> linkedList;
 
@@ -60,7 +60,7 @@ public class JavaLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashSetState {
         HashSet<String> hashSet;
 
@@ -75,7 +75,7 @@ public class JavaLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashMapState {
         HashMap<String, String> hashMap;
 
@@ -93,7 +93,7 @@ public class JavaLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class LinkedHashSetState {
         LinkedHashSet<String> linkedHashSet;
 
@@ -108,7 +108,7 @@ public class JavaLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class LinkedHashMapState {
         LinkedHashMap<String, String> linkedHashMap;
 
@@ -126,7 +126,7 @@ public class JavaLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class TreeSetState {
         TreeSet<String> treeSet;
 
@@ -141,7 +141,7 @@ public class JavaLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class TreeMapState {
         TreeMap<String, String> treeMap;
 

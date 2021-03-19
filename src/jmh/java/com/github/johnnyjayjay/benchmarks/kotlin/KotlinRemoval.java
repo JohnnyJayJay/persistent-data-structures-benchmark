@@ -2,6 +2,7 @@ package com.github.johnnyjayjay.benchmarks.kotlin;
 
 import com.github.johnnyjayjay.benchmarks.RandomString;
 import kotlinx.collections.immutable.ExtensionsKt;
+import kotlinx.collections.immutable.PersistentList;
 import kotlinx.collections.immutable.PersistentMap;
 import kotlinx.collections.immutable.PersistentSet;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -17,15 +18,29 @@ import org.openjdk.jmh.annotations.TearDown;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.github.johnnyjayjay.benchmarks.RandomString.ELEMENTS;
-import static com.github.johnnyjayjay.benchmarks.RandomString.shuffledElements;
+import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @Measurement(time = 5)
 public class KotlinRemoval {
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
+    public static class VectorState {
+        PersistentList<String> vector;
+
+        @Setup(Level.Iteration)
+        public void setUp() {
+            vector = ExtensionsKt.persistentListOf(ELEMENTS);
+        }
+
+        @TearDown(Level.Iteration)
+        public void tearDown() {
+            vector = null;
+        }
+    }
+
+    @State(Scope.Thread)
     public static class HashSetState {
         int index;
         PersistentSet<String> hashSet;
@@ -43,7 +58,7 @@ public class KotlinRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashMapState {
         int index;
         PersistentMap<String, String> hashMap;
@@ -65,7 +80,7 @@ public class KotlinRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class OrderedHashSetState {
         int index;
         PersistentSet<String> orderedHashSet;
@@ -83,7 +98,7 @@ public class KotlinRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class OrderedHashMapState {
         int index;
         PersistentMap<String, String> orderedHashMap;
@@ -102,6 +117,14 @@ public class KotlinRemoval {
         public void tearDown() {
             orderedHashMap = null;
             index = 0;
+        }
+    }
+
+    @Benchmark
+    public void benchmarkVector(VectorState state) {
+        PersistentList<String> vector = state.vector;
+        if (!vector.isEmpty()) {
+            state.vector = vector.removeAt(RANDOM.nextInt(vector.size()));
         }
     }
 

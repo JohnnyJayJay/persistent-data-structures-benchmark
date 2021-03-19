@@ -4,7 +4,7 @@ import java.util.Random;
 
 public final class RandomString {
 
-    private static final Random RANDOM = new Random();
+    public static final Random RANDOM = new Random();
 
     private static final int MIN_LENGTH = 1;
     private static final int MAX_LENGTH = 42;

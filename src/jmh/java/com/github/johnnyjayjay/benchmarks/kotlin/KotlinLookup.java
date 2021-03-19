@@ -27,7 +27,7 @@ import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 @Measurement(iterations = 3)
 public class KotlinLookup {
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class VectorState {
         PersistentList<String> vector;
 
@@ -42,7 +42,7 @@ public class KotlinLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashSetState {
         PersistentSet<String> hashSet;
 
@@ -57,7 +57,7 @@ public class KotlinLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashMapState {
         PersistentMap<String, String> hashMap;
 
@@ -76,7 +76,7 @@ public class KotlinLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class OrderedHashSetState {
         PersistentSet<String> orderedHashSet;
 
@@ -91,7 +91,7 @@ public class KotlinLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class OrderedHashMapState {
         PersistentMap<String, String> orderedHashMap;
 

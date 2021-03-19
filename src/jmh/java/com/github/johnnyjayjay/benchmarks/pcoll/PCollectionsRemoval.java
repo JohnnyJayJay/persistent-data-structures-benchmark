@@ -15,6 +15,7 @@ import org.pcollections.HashPMap;
 import org.pcollections.HashTreePMap;
 import org.pcollections.HashTreePSet;
 import org.pcollections.MapPSet;
+import org.pcollections.TreePVector;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,6 +28,21 @@ import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @Measurement(time = 5)
 public class PCollectionsRemoval {
+
+    @State(Scope.Thread)
+    public static class VectorState {
+        TreePVector<String> vector;
+
+        @Setup(Level.Iteration)
+        public void setUp() {
+            vector = TreePVector.from(Arrays.asList(ELEMENTS));
+        }
+
+        @TearDown(Level.Iteration)
+        public void tearDown() {
+            vector = null;
+        }
+    }
 
     @State(Scope.Thread)
     public static class StackState {
@@ -80,6 +96,14 @@ public class PCollectionsRemoval {
         public void tearDown() {
             map = null;
             index = 0;
+        }
+    }
+
+    @Benchmark
+    public void benchmarkVector(VectorState state) {
+        TreePVector<String> vector = state.vector;
+        if (!vector.isEmpty()) {
+            state.vector = vector.minus(RANDOM.nextInt(vector.size()));
         }
     }
 

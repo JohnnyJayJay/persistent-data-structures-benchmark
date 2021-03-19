@@ -36,7 +36,7 @@ import static com.github.johnnyjayjay.benchmarks.RandomString.shuffledElements;
 @Measurement(time = 5)
 public class ClojureRemoval {
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class ListState {
         IPersistentList list;
 
@@ -51,7 +51,7 @@ public class ClojureRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashSetState {
         int index;
         IPersistentSet hashSet;
@@ -69,7 +69,7 @@ public class ClojureRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashMapState {
         int index;
         IPersistentMap hashMap;
@@ -91,7 +91,7 @@ public class ClojureRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class TreeSetState {
         int index;
         IPersistentSet treeSet;
@@ -109,7 +109,7 @@ public class ClojureRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class TreeMapState {
         int index;
         IPersistentMap treeMap;
@@ -131,7 +131,7 @@ public class ClojureRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class QueueState {
         IPersistentList queue;
 

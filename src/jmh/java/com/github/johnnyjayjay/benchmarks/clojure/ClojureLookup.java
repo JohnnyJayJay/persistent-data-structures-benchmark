@@ -37,7 +37,7 @@ import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 @Measurement(iterations = 3)
 public class ClojureLookup {
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class VectorState {
         IPersistentVector vector;
 
@@ -52,7 +52,7 @@ public class ClojureLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class ListState {
         IPersistentList list;
 
@@ -67,7 +67,7 @@ public class ClojureLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashSetState {
         IPersistentSet hashSet;
 
@@ -82,7 +82,7 @@ public class ClojureLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashMapState {
         IPersistentMap hashMap;
 
@@ -101,7 +101,7 @@ public class ClojureLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class TreeSetState {
         IPersistentSet treeSet;
 
@@ -116,7 +116,7 @@ public class ClojureLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class TreeMapState {
         IPersistentMap treeMap;
 
@@ -135,7 +135,7 @@ public class ClojureLookup {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class QueueState {
         IPersistentList queue;
 

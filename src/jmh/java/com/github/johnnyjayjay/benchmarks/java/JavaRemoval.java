@@ -12,6 +12,7 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,7 +30,23 @@ import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 @Measurement(time = 5)
 public class JavaRemoval {
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
+    public static class ArrayListState {
+        ArrayList<String> arrayList;
+
+        @Setup(Level.Iteration)
+        public void setUp() {
+            arrayList = new ArrayList<>(Arrays.asList(ELEMENTS));
+        }
+
+        @TearDown(Level.Iteration)
+        public void tearDown() {
+            arrayList = null;
+        }
+
+    }
+
+    @State(Scope.Thread)
     public static class LinkedListState {
         LinkedList<String> linkedList;
 
@@ -44,7 +61,7 @@ public class JavaRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashSetState {
         int index;
         HashSet<String> hashSet;
@@ -62,7 +79,7 @@ public class JavaRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class HashMapState {
         int index;
         HashMap<String, String> hashMap;
@@ -83,7 +100,7 @@ public class JavaRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class LinkedHashSetState {
         int index;
         LinkedHashSet<String> linkedHashSet;
@@ -101,7 +118,7 @@ public class JavaRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class LinkedHashMapState {
         int index;
         LinkedHashMap<String, String> linkedHashMap;
@@ -122,7 +139,7 @@ public class JavaRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class TreeSetState {
         int index;
         TreeSet<String> treeSet;
@@ -140,7 +157,7 @@ public class JavaRemoval {
         }
     }
 
-    @State(Scope.Benchmark)
+    @State(Scope.Thread)
     public static class TreeMapState {
         int index;
         TreeMap<String, String> treeMap;
@@ -158,6 +175,14 @@ public class JavaRemoval {
         public void tearDown() {
             treeMap = null;
             index = 0;
+        }
+    }
+
+    @Benchmark
+    public void benchmarkArrayList(ArrayListState state) {
+        ArrayList<String> list = state.arrayList;
+        if (!list.isEmpty()) {
+            list.remove(RANDOM.nextInt(list.size()));
         }
     }
 
