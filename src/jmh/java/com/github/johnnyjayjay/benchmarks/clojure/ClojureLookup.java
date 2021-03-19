@@ -15,7 +15,10 @@ import clojure.lang.PersistentVector;
 import clojure.lang.RT;
 import com.github.johnnyjayjay.benchmarks.RandomString;
 import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OperationsPerInvocation;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
@@ -24,9 +27,12 @@ import org.openjdk.jmh.annotations.TearDown;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class ClojureLookup {
 
     @State(Scope.Benchmark)
@@ -134,6 +140,14 @@ public class ClojureLookup {
         @Setup
         public void setUp() {
             queue = PersistentQueue.EMPTY;
+            for (String element : ELEMENTS) {
+                queue = (IPersistentList) RT.conj(queue, element);
+            }
+        }
+
+        @TearDown
+        public void tearDown() {
+            queue = null;
         }
     }
 

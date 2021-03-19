@@ -56,18 +56,17 @@ public class KotlinLookup {
         }
     }
 
-
-    @SuppressWarnings("rawtypes")
-    private static final Pair[] PAIRS = Arrays.stream(ELEMENTS).map((s) -> new Pair<>(s, "")).toArray(Pair[]::new);
-
     @State(Scope.Benchmark)
     public static class HashMapState {
         PersistentMap<String, String> hashMap;
 
-        @SuppressWarnings("unchecked")
         @Setup
         public void setUp() {
-            hashMap = ExtensionsKt.persistentHashMapOf(PAIRS);
+            PersistentMap.Builder<String, String> builder = ExtensionsKt.<String, String>persistentHashMapOf().builder();
+            for (String element : RandomString.ELEMENTS) {
+                builder.put(element, "");
+            }
+            hashMap = builder.build();
         }
 
         @TearDown
@@ -95,10 +94,13 @@ public class KotlinLookup {
     public static class OrderedHashMapState {
         PersistentMap<String, String> orderedHashMap;
 
-        @SuppressWarnings("unchecked")
         @Setup
         public void setUp() {
-            orderedHashMap = ExtensionsKt.persistentMapOf(PAIRS);
+            PersistentMap.Builder<String, String> builder = ExtensionsKt.<String, String>persistentHashMapOf().builder();
+            for (String element : RandomString.ELEMENTS) {
+                builder.put(element, "");
+            }
+            orderedHashMap = builder.build();
         }
 
         @TearDown
