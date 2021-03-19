@@ -28,8 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.johnnyjayjay.benchmarks.RandomString.ELEMENTS;
-import static com.github.johnnyjayjay.benchmarks.RandomString.shuffledElements;
+import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -156,22 +155,22 @@ public class ClojureRemoval {
 
     @Benchmark
     public void benchmarkHashSet(HashSetState state) {
-        state.hashSet = state.hashSet.disjoin(ELEMENTS[state.index == ELEMENTS.length ? 0 : state.index++]);
+        state.hashSet = state.hashSet.disjoin(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
     }
 
     @Benchmark
     public void benchmarkHashMap(HashMapState state) {
-        state.hashMap = (IPersistentMap) RT.dissoc(state.hashMap, ELEMENTS[state.index == ELEMENTS.length ? 0 : state.index++]);
+        state.hashMap = (IPersistentMap) RT.dissoc(state.hashMap, ELEMENTS[state.index == SIZE ? 0 : state.index++]);
     }
 
     @Benchmark
     public void benchmarkTreeSet(TreeSetState state) {
-        state.treeSet = state.treeSet.disjoin(ELEMENTS[state.index == ELEMENTS.length ? 0 : state.index++]);
+        state.treeSet = state.treeSet.disjoin(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
     }
 
     @Benchmark
     public void benchmarkTreeMap(TreeMapState state) {
-        state.treeMap = (IPersistentMap) RT.dissoc(state.treeMap, ELEMENTS[state.index == ELEMENTS.length ? 0 : state.index++]);
+        state.treeMap = (IPersistentMap) RT.dissoc(state.treeMap, ELEMENTS[state.index == SIZE ? 0 : state.index++]);
     }
 
     @Benchmark

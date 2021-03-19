@@ -13,8 +13,10 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.pcollections.ConsPStack;
 import org.pcollections.HashPMap;
+import org.pcollections.HashTreePBag;
 import org.pcollections.HashTreePMap;
 import org.pcollections.HashTreePSet;
+import org.pcollections.MapPBag;
 import org.pcollections.MapPSet;
 import org.pcollections.TreePVector;
 
@@ -24,6 +26,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.johnnyjayjay.benchmarks.RandomString.ELEMENTS;
+import static com.github.johnnyjayjay.benchmarks.RandomString.randomElement;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -94,6 +97,21 @@ public class PCollectionsLookup {
         }
     }
 
+    @State(Scope.Thread)
+    public static class BagState {
+        MapPBag<String> bag;
+
+        @Setup
+        public void setUp() {
+            bag = HashTreePBag.from(Arrays.asList(ELEMENTS));
+        }
+
+        @TearDown
+        public void tearDown() {
+            bag = null;
+        }
+    }
+
     @Benchmark
     public void benchmarkVector(VectorState state) {
         Object x = state.vector.get(RandomString.randomIndex());
@@ -116,5 +134,12 @@ public class PCollectionsLookup {
     public void benchmarkMap(MapState state) {
         Object included = state.map.get(RandomString.randomElement());
         Object notIncluded = state.map.get(RandomString.create());
+    }
+
+    @Benchmark
+    @OperationsPerInvocation(2)
+    public void benchmarkBag(BagState state) {
+        boolean included = state.bag.contains(randomElement());
+        boolean notIncluded = state.bag.contains(RandomString.create());
     }
 }

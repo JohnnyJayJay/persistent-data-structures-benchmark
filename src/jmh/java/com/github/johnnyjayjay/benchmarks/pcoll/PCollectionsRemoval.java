@@ -12,8 +12,10 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.pcollections.ConsPStack;
 import org.pcollections.HashPMap;
+import org.pcollections.HashTreePBag;
 import org.pcollections.HashTreePMap;
 import org.pcollections.HashTreePSet;
+import org.pcollections.MapPBag;
 import org.pcollections.MapPSet;
 import org.pcollections.TreePVector;
 
@@ -99,6 +101,24 @@ public class PCollectionsRemoval {
         }
     }
 
+    @State(Scope.Thread)
+    public static class BagState {
+        int index;
+        MapPBag<String> bag;
+
+        @Setup(Level.Iteration)
+        public void setUp() {
+            bag = HashTreePBag.from(Arrays.asList(shuffledElements()));
+            index = 0;
+        }
+
+        @TearDown(Level.Iteration)
+        public void tearDown() {
+            bag = null;
+            index = 0;
+        }
+    }
+
     @Benchmark
     public void benchmarkVector(VectorState state) {
         TreePVector<String> vector = state.vector;
@@ -114,12 +134,17 @@ public class PCollectionsRemoval {
 
     @Benchmark
     public void benchmarkSet(SetState state) {
-        state.set = state.set.minus(ELEMENTS[state.index == ELEMENTS.length ? 0 : state.index++]);
+        state.set = state.set.minus(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
     }
 
     @Benchmark
     public void benchmarkMap(MapState state) {
-        state.map = state.map.minus(ELEMENTS[state.index == ELEMENTS.length ? 0 : state.index++]);
+        state.map = state.map.minus(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+    }
+
+    @Benchmark
+    public void benchmarkBag(BagState state) {
+        state.bag = state.bag.minus(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
     }
 
 }

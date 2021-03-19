@@ -130,22 +130,22 @@ public class KotlinRemoval {
 
     @Benchmark
     public void benchmarkHashSet(HashSetState state) {
-        state.hashSet = state.hashSet.remove(ELEMENTS[state.index == ELEMENTS.length ? 0 : state.index++]);
+        state.hashSet = state.hashSet.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
     }
 
     @Benchmark
     public void benchmarkHashMap(HashMapState state) {
-        state.hashMap = state.hashMap.remove(ELEMENTS[state.index == ELEMENTS.length ? 0 : state.index++]);
+        state.hashMap = state.hashMap.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
     }
 
     @Benchmark
     public void benchmarkOrderedHashSet(OrderedHashSetState state) {
-        state.orderedHashSet = state.orderedHashSet.remove(ELEMENTS[state.index == ELEMENTS.length ? 0 : state.index++]);
+        state.orderedHashSet = state.orderedHashSet.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
     }
 
     @Benchmark
     public void benchmarkOrderedHashMap(OrderedHashMapState state) {
-        state.orderedHashMap = state.orderedHashMap.remove(ELEMENTS[state.index == ELEMENTS.length ? 0 : state.index++]);
+        state.orderedHashMap = state.orderedHashMap.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
     }
 
 }
