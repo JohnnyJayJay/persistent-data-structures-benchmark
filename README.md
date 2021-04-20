@@ -18,7 +18,7 @@ Another goal is to see how persistent collections compare to the mutable
 
 ## Non-Goals
 
-First of all and most importantly:
+First and most importantly:
 **This benchmark does not aim to determine what collections are ultimately better than others in general.**
 
 It does not emulate a real-world-scenario, because the operations are each benchmarked individually. 
@@ -42,8 +42,8 @@ Below you can see how many collections are benchmarked in each category for each
 
 | Benchmark/Subject Benchmark count | Java | PCollections | Kotlin | Clojure |                                     |
 | --------------------------------- | ---- | ------------ | ------ | ------- | ----------------------------------- |
-| Addition                          | 8    | 5            | 5      | 7       | 5 * 10s Warmup, 5 * 10s Measurement |
-| Removal                           | 8    | 5            | 5      | 6       | 5 * 10s Warmup, 5 * 5s Measurement  |
+| Addition                          | 8    | 5            | 5      | 7       | 5 * 1M ops Warmup, 5 * 1M ops Measurement |
+| Removal                           | 8    | 5            | 5      | 6       | 5 * 1M ops Warmup, 5 * 1M ops Measurement  |
 | Lookup                            | 8    | 5            | 5      | 7       | 5 * 10s Warmup, 3 * 10s Measurement |
 
 Here are all the collections that are benchmarked. Clojure is missing the removal benchmark for its `PersistentVector`, because it doesn't define an index-based removal operation.
@@ -63,27 +63,13 @@ Here are all the collections that are benchmarked. Clojure is missing the remova
 
 - The addition benchmarks fill an empty collection with random strings each iteration
 
-- The removal benchmarks remove elements from a collection filled with 500 million random strings
+- The removal benchmarks remove elements from a fresh collection each iteration
 
-- The lookup benchmarks lookup random elements/indices from a collection filled with 500 million random strings
+- The lookup benchmarks lookup random elements/indices from a collection
+
+Every single benchmark is forked 3 times to make up for differences in VM configurations and other environmental factors.
 
 ## How to run
-
-The benchmarks are very heavy on time and resources. Make sure you have a potent machine and enough time.  You should have a modern CPU with a decent clock and multiple cores. You should have at least 8 GB of fast memory. And finally, while the benchmarks are running, optimally nothing else should.
-
-The benchmarks will take time. How much can be taken from the table above:
-
-- `(8 + 5 + 5 + 7) * 5 * 10 * 2` seconds for addition benchmarks
-
-- `(8 + 5 + 5 + 6) * 5 * 10 + (8 + 5 + 5 + 6) * 5 * 5` seconds for removal benchmarks
-
-- `(8 + 5 + 5 + 7) * 5 * 10 + (8 + 5 + 5 + 7) * 3 * 10` seconds for lookup benchmarks
-
-- Additionally, `5 * 10 * 2` seconds for a benchmark of the random string generation method.
-
-Now, every single benchmark is forked 3 times to make up for differences in VM configurations and other environmental factors.
-
-With everything combined, these benchmarks take a total of **19,200 seconds** or **5 1/3 hours**.
 
 If you do want to run everything, do the following:
 
