@@ -23,11 +23,11 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.johnnyjayjay.benchmarks.RandomString.*;
+import static com.github.johnnyjayjay.benchmarks.Global.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Measurement(time = 5)
+@Measurement(batchSize = REMOVE_OPS)
 public class JavaRemoval {
 
     @State(Scope.Thread)
@@ -36,7 +36,7 @@ public class JavaRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            arrayList = new ArrayList<>(Arrays.asList(ELEMENTS));
+            arrayList = new ArrayList<>(Arrays.asList(elements()));
         }
 
         @TearDown(Level.Iteration)
@@ -52,7 +52,8 @@ public class JavaRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            linkedList = new LinkedList<>(Arrays.asList(shuffledElements()));
+            linkedList = new LinkedList<>(Arrays.asList(elements()));
+            shuffleElements();
         }
 
         @TearDown(Level.Iteration)
@@ -68,7 +69,8 @@ public class JavaRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            hashSet = new HashSet<>(Arrays.asList(shuffledElements()));
+            hashSet = new HashSet<>(Arrays.asList(elements()));
+            shuffleElements();
             index = 0;
         }
 
@@ -86,10 +88,11 @@ public class JavaRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            hashMap = new HashMap<>(SIZE);
-            for (String element : shuffledElements()) {
+            hashMap = new HashMap<>(ELEMENTS_SIZE);
+            for (String element : elements()) {
                 hashMap.put(element, "");
             }
+            shuffleElements();
             index = 0;
         }
 
@@ -107,7 +110,8 @@ public class JavaRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            linkedHashSet = new LinkedHashSet<>(Arrays.asList(shuffledElements()));
+            linkedHashSet = new LinkedHashSet<>(Arrays.asList(elements()));
+            shuffleElements();
             index = 0;
         }
 
@@ -125,10 +129,11 @@ public class JavaRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            linkedHashMap = new LinkedHashMap<>(SIZE);
-            for (String element : shuffledElements()) {
+            linkedHashMap = new LinkedHashMap<>(ELEMENTS_SIZE);
+            for (String element : elements()) {
                 linkedHashMap.put(element, "");
             }
+            shuffleElements();
             index = 0;
         }
 
@@ -146,7 +151,8 @@ public class JavaRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            treeSet = new TreeSet<>(Arrays.asList(shuffledElements()));
+            treeSet = new TreeSet<>(Arrays.asList(elements()));
+            shuffleElements();
             index = 0;
         }
 
@@ -165,9 +171,10 @@ public class JavaRemoval {
         @Setup(Level.Iteration)
         public void setUp() {
             treeMap = new TreeMap<>();
-            for (String element : shuffledElements()) {
+            for (String element : elements()) {
                 treeMap.put(element, "");
             }
+            shuffleElements();
             index = 0;
         }
 
@@ -180,10 +187,7 @@ public class JavaRemoval {
 
     @Benchmark
     public void benchmarkArrayList(ArrayListState state) {
-        ArrayList<String> list = state.arrayList;
-        if (!list.isEmpty()) {
-            list.remove(RANDOM.nextInt(list.size()));
-        }
+        state.arrayList.remove(randomIndex());
     }
 
     @Benchmark
@@ -195,32 +199,32 @@ public class JavaRemoval {
 
     @Benchmark
     public void benchmarkHashSet(HashSetState state) {
-        state.hashSet.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.hashSet.remove(elements()[state.index++]);
     }
 
     @Benchmark
     public void benchmarkHashMap(HashMapState state) {
-        state.hashMap.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.hashMap.remove(elements()[state.index++]);
     }
 
     @Benchmark
     public void benchmarkLinkedHashSet(LinkedHashSetState state) {
-        state.linkedHashSet.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.linkedHashSet.remove(elements()[state.index++]);
     }
 
     @Benchmark
     public void benchmarkHashLinkedMap(LinkedHashMapState state) {
-        state.linkedHashMap.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.linkedHashMap.remove(elements()[state.index++]);
     }
 
     @Benchmark
     public void benchmarkTreeMap(TreeMapState state) {
-        state.treeMap.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.treeMap.remove(elements()[state.index++]);
     }
 
     @Benchmark
     public void benchmarkTreeSet(TreeSetState state) {
-        state.treeSet.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.treeSet.remove(elements()[state.index++]);
     }
 
 }

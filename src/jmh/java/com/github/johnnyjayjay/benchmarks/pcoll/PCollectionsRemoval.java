@@ -24,11 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.johnnyjayjay.benchmarks.RandomString.*;
+import static com.github.johnnyjayjay.benchmarks.Global.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Measurement(time = 5)
+@Measurement(batchSize = REMOVE_OPS)
 public class PCollectionsRemoval {
 
     @State(Scope.Thread)
@@ -37,7 +37,7 @@ public class PCollectionsRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            vector = TreePVector.from(Arrays.asList(ELEMENTS));
+            vector = TreePVector.from(Arrays.asList(elements()));
         }
 
         @TearDown(Level.Iteration)
@@ -52,7 +52,8 @@ public class PCollectionsRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            stack = ConsPStack.from(Arrays.asList(shuffledElements()));
+            stack = ConsPStack.from(Arrays.asList(elements()));
+            shuffleElements();
         }
 
         @TearDown(Level.Iteration)
@@ -68,7 +69,8 @@ public class PCollectionsRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            set = HashTreePSet.from(Arrays.asList(shuffledElements()));
+            set = HashTreePSet.from(Arrays.asList(elements()));
+            shuffleElements();
             index = 0;
         }
 
@@ -86,11 +88,12 @@ public class PCollectionsRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            Map<String, String> transientMap = new HashMap<>(SIZE);
-            for (String element : shuffledElements()) {
+            Map<String, String> transientMap = new HashMap<>(ELEMENTS_SIZE);
+            for (String element : elements()) {
                 transientMap.put(element, "");
             }
             map = HashTreePMap.from(transientMap);
+            shuffleElements();
             index = 0;
         }
 
@@ -108,7 +111,8 @@ public class PCollectionsRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            bag = HashTreePBag.from(Arrays.asList(shuffledElements()));
+            bag = HashTreePBag.from(Arrays.asList(elements()));
+            shuffleElements();
             index = 0;
         }
 
@@ -121,10 +125,7 @@ public class PCollectionsRemoval {
 
     @Benchmark
     public void benchmarkVector(VectorState state) {
-        TreePVector<String> vector = state.vector;
-        if (!vector.isEmpty()) {
-            state.vector = vector.minus(RANDOM.nextInt(vector.size()));
-        }
+        state.vector = state.vector.minus(randomIndex());
     }
 
     @Benchmark
@@ -134,17 +135,17 @@ public class PCollectionsRemoval {
 
     @Benchmark
     public void benchmarkSet(SetState state) {
-        state.set = state.set.minus(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.set = state.set.minus(elements()[state.index++]);
     }
 
     @Benchmark
     public void benchmarkMap(MapState state) {
-        state.map = state.map.minus(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.map = state.map.minus(elements()[state.index++]);
     }
 
     @Benchmark
     public void benchmarkBag(BagState state) {
-        state.bag = state.bag.minus(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.bag = state.bag.minus(elements()[state.index++]);
     }
 
 }

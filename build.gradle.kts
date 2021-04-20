@@ -18,6 +18,8 @@ dependencies {
 }
 
 jmh {
+    this.includes.set(listOf("RandomStringBenchmark\\.allocateBench"))
     fork.set(3)
     forceGC.set(true)
+    resultFormat.set("csv")
 }

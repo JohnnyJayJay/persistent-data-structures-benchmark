@@ -1,6 +1,5 @@
 package com.github.johnnyjayjay.benchmarks.kotlin;
 
-import com.github.johnnyjayjay.benchmarks.RandomString;
 import kotlinx.collections.immutable.ExtensionsKt;
 import kotlinx.collections.immutable.PersistentList;
 import kotlinx.collections.immutable.PersistentMap;
@@ -18,11 +17,11 @@ import org.openjdk.jmh.annotations.TearDown;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.github.johnnyjayjay.benchmarks.RandomString.*;
+import static com.github.johnnyjayjay.benchmarks.Global.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Measurement(time = 5)
+@Measurement(batchSize = REMOVE_OPS)
 public class KotlinRemoval {
 
     @State(Scope.Thread)
@@ -31,7 +30,7 @@ public class KotlinRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            vector = ExtensionsKt.persistentListOf(ELEMENTS);
+            vector = ExtensionsKt.persistentListOf(elements());
         }
 
         @TearDown(Level.Iteration)
@@ -47,7 +46,8 @@ public class KotlinRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            hashSet = ExtensionsKt.persistentHashSetOf(shuffledElements());
+            hashSet = ExtensionsKt.persistentHashSetOf(elements());
+            shuffleElements();
             index = 0;
         }
 
@@ -66,10 +66,11 @@ public class KotlinRemoval {
         @Setup(Level.Iteration)
         public void setUp() {
             PersistentMap.Builder<String, String> builder = ExtensionsKt.<String, String>persistentHashMapOf().builder();
-            for (String element : shuffledElements()) {
+            for (String element : elements()) {
                 builder.put(element, "");
             }
             hashMap = builder.build();
+            shuffleElements();
             index = 0;
         }
 
@@ -87,7 +88,8 @@ public class KotlinRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            orderedHashSet = ExtensionsKt.persistentSetOf(shuffledElements());
+            orderedHashSet = ExtensionsKt.persistentSetOf(elements());
+            shuffleElements();
             index = 0;
         }
 
@@ -105,11 +107,12 @@ public class KotlinRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            PersistentMap.Builder<String, String> builder = ExtensionsKt.<String, String>persistentHashMapOf().builder();
-            for (String element : shuffledElements()) {
+            PersistentMap.Builder<String, String> builder = ExtensionsKt.<String, String>persistentMapOf().builder();
+            for (String element : elements()) {
                 builder.put(element, "");
             }
             orderedHashMap = builder.build();
+            shuffleElements();
             index = 0;
         }
 
@@ -122,30 +125,27 @@ public class KotlinRemoval {
 
     @Benchmark
     public void benchmarkVector(VectorState state) {
-        PersistentList<String> vector = state.vector;
-        if (!vector.isEmpty()) {
-            state.vector = vector.removeAt(RANDOM.nextInt(vector.size()));
-        }
+        state.vector = state.vector.removeAt(randomIndex());
     }
 
     @Benchmark
     public void benchmarkHashSet(HashSetState state) {
-        state.hashSet = state.hashSet.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.hashSet = state.hashSet.remove(elements()[state.index++]);
     }
 
     @Benchmark
     public void benchmarkHashMap(HashMapState state) {
-        state.hashMap = state.hashMap.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.hashMap = state.hashMap.remove(elements()[state.index++]);
     }
 
     @Benchmark
     public void benchmarkOrderedHashSet(OrderedHashSetState state) {
-        state.orderedHashSet = state.orderedHashSet.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.orderedHashSet = state.orderedHashSet.remove(elements()[state.index++]);
     }
 
     @Benchmark
     public void benchmarkOrderedHashMap(OrderedHashMapState state) {
-        state.orderedHashMap = state.orderedHashMap.remove(ELEMENTS[state.index == SIZE ? 0 : state.index++]);
+        state.orderedHashMap = state.orderedHashMap.remove(elements()[state.index++]);
     }
 
 }

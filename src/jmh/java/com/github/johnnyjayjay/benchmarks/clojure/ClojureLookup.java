@@ -24,13 +24,15 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.johnnyjayjay.benchmarks.RandomString.*;
+import static com.github.johnnyjayjay.benchmarks.Global.*;
+
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -43,7 +45,7 @@ public class ClojureLookup {
 
         @Setup
         public void setUp() {
-            vector = PersistentVector.create((Object[]) ELEMENTS);
+            vector = PersistentVector.create((Object[]) elements());
         }
 
         @TearDown
@@ -58,7 +60,7 @@ public class ClojureLookup {
 
         @Setup
         public void setUp() {
-            list = PersistentList.create(Arrays.asList(ELEMENTS));
+            list = PersistentList.create(Arrays.asList(elements()));
         }
 
         @TearDown
@@ -73,7 +75,7 @@ public class ClojureLookup {
 
         @Setup
         public void setUp() {
-            hashSet = PersistentHashSet.create((Object[]) ELEMENTS);
+            hashSet = PersistentHashSet.create((Object[]) elements());
         }
 
         @TearDown
@@ -89,7 +91,7 @@ public class ClojureLookup {
         @Setup
         public void setUp() {
             ITransientMap transientMap = PersistentHashMap.EMPTY.asTransient();
-            for (String element : ELEMENTS) {
+            for (String element : elements()) {
                 transientMap.assoc(element, "");
             }
             hashMap = transientMap.persistent();
@@ -107,7 +109,7 @@ public class ClojureLookup {
 
         @Setup
         public void setUp() {
-            treeSet = PersistentTreeSet.create(PersistentVector.create((Object[]) ELEMENTS).seq());
+            treeSet = PersistentTreeSet.create(PersistentVector.create((Object[]) elements()).seq());
         }
 
         @TearDown
@@ -123,7 +125,7 @@ public class ClojureLookup {
         @Setup
         public void setUp() {
             Map<String, String> transientMap = new HashMap<>();
-            for (String element : ELEMENTS) {
+            for (String element : elements()) {
                 transientMap.put(element, "");
             }
             treeMap = PersistentTreeMap.create(transientMap);
@@ -142,7 +144,7 @@ public class ClojureLookup {
         @Setup
         public void setUp() {
             queue = PersistentQueue.EMPTY;
-            for (String element : ELEMENTS) {
+            for (String element : elements()) {
                 queue = (IPersistentList) RT.conj(queue, element);
             }
         }
@@ -154,45 +156,45 @@ public class ClojureLookup {
     }
 
     @Benchmark
-    public void benchmarkVector(VectorState state) {
-        Object x = RT.get(state.vector, randomIndex());
+    public Object benchmarkVector(VectorState state) {
+        return RT.get(state.vector, randomIndex());
     }
 
     @Benchmark
-    public void benchmarkList(ListState state) {
-        Object x = RT.first(state.list);
-    }
-
-    @Benchmark
-    @OperationsPerInvocation(2)
-    public void benchmarkHashSet(HashSetState state) {
-        Object included = RT.contains(state.hashSet, randomElement());
-        Object notIncluded = RT.contains(state.hashSet, RandomString.create());
+    public Object benchmarkList(ListState state) {
+        return RT.first(state.list);
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkHashMap(HashMapState state) {
-        Object included = RT.get(state.hashMap, randomElement());
-        Object notIncluded = RT.get(state.hashMap, RandomString.create());
+    public void benchmarkHashSet(Blackhole blackhole, HashSetState state) {
+        blackhole.consume(RT.contains(state.hashSet, randomElement()));
+        blackhole.consume(RT.contains(state.hashSet, RandomString.create()));
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkTreeMap(TreeMapState state) {
-        Object included = RT.get(state.treeMap, randomElement());
-        Object notIncluded = RT.get(state.treeMap, RandomString.create());
+    public void benchmarkHashMap(Blackhole blackhole, HashMapState state) {
+        blackhole.consume(RT.get(state.hashMap, randomElement()));
+        blackhole.consume(RT.get(state.hashMap, RandomString.create()));
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkTreeSet(TreeSetState state) {
-        Object included = RT.contains(state.treeSet, randomElement());
-        Object notIncluded = RT.contains(state.treeSet, RandomString.create());
+    public void benchmarkTreeMap(Blackhole blackhole, TreeMapState state) {
+        blackhole.consume(RT.get(state.treeMap, randomElement()));
+        blackhole.consume(RT.get(state.treeMap, RandomString.create()));
     }
 
     @Benchmark
-    public void benchmarkQueue(QueueState state) {
-        RT.conj(state.queue, RandomString.create());
+    @OperationsPerInvocation(2)
+    public void benchmarkTreeSet(Blackhole blackhole, TreeSetState state) {
+        blackhole.consume(RT.contains(state.treeSet, randomElement()));
+        blackhole.consume(RT.contains(state.treeSet, RandomString.create()));
+    }
+
+    @Benchmark
+    public Object benchmarkQueue(Blackhole blackhole, QueueState state) {
+        return RT.peek(state.queue);
     }
 }

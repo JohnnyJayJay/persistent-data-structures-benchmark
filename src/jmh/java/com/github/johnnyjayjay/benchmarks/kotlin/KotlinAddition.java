@@ -8,6 +8,7 @@ import kotlinx.collections.immutable.PersistentSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
@@ -16,9 +17,12 @@ import org.openjdk.jmh.annotations.State;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.github.johnnyjayjay.benchmarks.Global.ADD_OPS;
+
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
+@Measurement(batchSize = ADD_OPS)
 public class KotlinAddition {
 
     private PersistentList<String> vector;

@@ -11,6 +11,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.infra.Blackhole;
 import org.pcollections.ConsPStack;
 import org.pcollections.HashPMap;
 import org.pcollections.HashTreePBag;
@@ -25,8 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.johnnyjayjay.benchmarks.RandomString.ELEMENTS;
-import static com.github.johnnyjayjay.benchmarks.RandomString.randomElement;
+import static com.github.johnnyjayjay.benchmarks.Global.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -39,7 +39,7 @@ public class PCollectionsLookup {
 
         @Setup
         public void setUp() {
-            vector = TreePVector.from(Arrays.asList(ELEMENTS));
+            vector = TreePVector.from(Arrays.asList(elements()));
         }
 
         @TearDown
@@ -54,7 +54,7 @@ public class PCollectionsLookup {
 
         @Setup
         public void setUp() {
-            stack = ConsPStack.from(Arrays.asList(ELEMENTS));
+            stack = ConsPStack.from(Arrays.asList(elements()));
         }
 
         @TearDown
@@ -69,7 +69,7 @@ public class PCollectionsLookup {
 
         @Setup
         public void setUp() {
-            set = HashTreePSet.from(Arrays.asList(ELEMENTS));
+            set = HashTreePSet.from(Arrays.asList(elements()));
         }
 
         @TearDown
@@ -84,8 +84,8 @@ public class PCollectionsLookup {
 
         @Setup
         public void setUp() {
-            Map<String, String> transientMap = new HashMap<>(ELEMENTS.length);
-            for (String element : ELEMENTS) {
+            Map<String, String> transientMap = new HashMap<>(ELEMENTS_SIZE);
+            for (String element : elements()) {
                 transientMap.put(element, "");
             }
             map = HashTreePMap.from(transientMap);
@@ -103,7 +103,7 @@ public class PCollectionsLookup {
 
         @Setup
         public void setUp() {
-            bag = HashTreePBag.from(Arrays.asList(ELEMENTS));
+            bag = HashTreePBag.from(Arrays.asList(elements()));
         }
 
         @TearDown
@@ -113,33 +113,33 @@ public class PCollectionsLookup {
     }
 
     @Benchmark
-    public void benchmarkVector(VectorState state) {
-        Object x = state.vector.get(RandomString.randomIndex());
+    public String benchmarkVector(VectorState state) {
+        return state.vector.get(randomIndex());
     }
 
     @Benchmark
-    public void benchmarkList(StackState state) {
-        Object x = state.stack.get(0);
-    }
-
-    @Benchmark
-    @OperationsPerInvocation(2)
-    public void benchmarkSet(SetState state) {
-        boolean included = state.set.contains(RandomString.randomElement());
-        boolean notIncluded = state.set.contains(RandomString.create());
+    public String benchmarkList(StackState state) {
+        return state.stack.get(0);
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkMap(MapState state) {
-        Object included = state.map.get(RandomString.randomElement());
-        Object notIncluded = state.map.get(RandomString.create());
+    public void benchmarkSet(Blackhole blackhole, SetState state) {
+        blackhole.consume(state.set.contains(randomElement()));
+        blackhole.consume(state.set.contains(RandomString.create()));
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkBag(BagState state) {
-        boolean included = state.bag.contains(randomElement());
-        boolean notIncluded = state.bag.contains(RandomString.create());
+    public void benchmarkMap(Blackhole blackhole, MapState state) {
+        blackhole.consume(state.map.get(randomElement()));
+        blackhole.consume(state.map.get(RandomString.create()));
+    }
+
+    @Benchmark
+    @OperationsPerInvocation(2)
+    public void benchmarkBag(Blackhole blackhole, BagState state) {
+        blackhole.consume(state.bag.contains(randomElement()));
+        blackhole.consume(state.bag.contains(RandomString.create()));
     }
 }

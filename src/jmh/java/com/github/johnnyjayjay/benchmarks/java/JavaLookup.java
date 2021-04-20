@@ -11,6 +11,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +24,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.johnnyjayjay.benchmarks.RandomString.*;
+import static com.github.johnnyjayjay.benchmarks.Global.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -36,7 +37,7 @@ public class JavaLookup {
 
         @Setup
         public void setUp() {
-            arrayList = new ArrayList<>(Arrays.asList(ELEMENTS));
+            arrayList = new ArrayList<>(Arrays.asList(elements()));
         }
 
         @TearDown
@@ -51,7 +52,7 @@ public class JavaLookup {
 
         @Setup
         public void setUp() {
-            linkedList = new LinkedList<>(Arrays.asList(ELEMENTS));
+            linkedList = new LinkedList<>(Arrays.asList(elements()));
         }
 
         @TearDown
@@ -66,7 +67,7 @@ public class JavaLookup {
 
         @Setup
         public void setUp() {
-            hashSet = new HashSet<>(Arrays.asList(ELEMENTS));
+            hashSet = new HashSet<>(Arrays.asList(elements()));
         }
 
         @TearDown
@@ -81,8 +82,8 @@ public class JavaLookup {
 
         @Setup
         public void setUp() {
-            hashMap = new HashMap<>(SIZE);
-            for (String element : ELEMENTS) {
+            hashMap = new HashMap<>(ELEMENTS_SIZE);
+            for (String element : elements()) {
                 hashMap.put(element, "");
             }
         }
@@ -99,7 +100,7 @@ public class JavaLookup {
 
         @Setup
         public void setUp() {
-            linkedHashSet = new LinkedHashSet<>(Arrays.asList(ELEMENTS));
+            linkedHashSet = new LinkedHashSet<>(Arrays.asList(elements()));
         }
 
         @TearDown
@@ -114,8 +115,8 @@ public class JavaLookup {
 
         @Setup
         public void setUp() {
-            linkedHashMap = new LinkedHashMap<>(SIZE);
-            for (String element : ELEMENTS) {
+            linkedHashMap = new LinkedHashMap<>(ELEMENTS_SIZE);
+            for (String element : elements()) {
                 linkedHashMap.put(element, "");
             }
         }
@@ -132,7 +133,7 @@ public class JavaLookup {
 
         @Setup
         public void setUp() {
-            treeSet = new TreeSet<>(Arrays.asList(ELEMENTS));
+            treeSet = new TreeSet<>(Arrays.asList(elements()));
         }
 
         @TearDown
@@ -148,7 +149,7 @@ public class JavaLookup {
         @Setup
         public void setUp() {
             treeMap = new TreeMap<>();
-            for (String element : ELEMENTS) {
+            for (String element : elements()) {
                 treeMap.put(element, "");
             }
         }
@@ -160,56 +161,56 @@ public class JavaLookup {
     }
 
     @Benchmark
-    public void benchmarkArrayList(ArrayListState state) {
-        Object x = state.arrayList.get(randomIndex());
+    public String benchmarkArrayList(ArrayListState state) {
+        return state.arrayList.get(randomIndex());
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkLinkedList(LinkedListState state) {
-        Object x = state.linkedList.getFirst();
-        Object y = state.linkedList.getLast();
+    public void benchmarkLinkedList(Blackhole blackhole, LinkedListState state) {
+        blackhole.consume(state.linkedList.getFirst());
+        blackhole.consume(state.linkedList.getLast());
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkHashSet(HashSetState state) {
-        boolean included = state.hashSet.contains(randomElement());
-        boolean notIncluded = state.hashSet.contains(RandomString.create());
+    public void benchmarkHashSet(Blackhole blackhole, HashSetState state) {
+        blackhole.consume(state.hashSet.contains(randomElement()));
+        blackhole.consume(state.hashSet.contains(RandomString.create()));
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkHashMap(HashMapState state) {
-        Object included = state.hashMap.get(randomElement());
-        Object notIncluded = state.hashMap.get(RandomString.create());
+    public void benchmarkHashMap(Blackhole blackhole, HashMapState state) {
+        blackhole.consume(state.hashMap.get(randomElement()));
+        blackhole.consume(state.hashMap.get(RandomString.create()));
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkLinkedHashSet(LinkedHashSetState state) {
-        boolean included = state.linkedHashSet.contains(randomElement());
-        boolean notIncluded = state.linkedHashSet.contains(RandomString.create());
+    public void benchmarkLinkedHashSet(Blackhole blackhole, LinkedHashSetState state) {
+        blackhole.consume(state.linkedHashSet.contains(randomElement()));
+        blackhole.consume(state.linkedHashSet.contains(RandomString.create()));
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkHashLinkedMap(LinkedHashMapState state) {
-        Object included = state.linkedHashMap.get(randomElement());
-        Object notIncluded = state.linkedHashMap.get(RandomString.create());
+    public void benchmarkHashLinkedMap(Blackhole blackhole, LinkedHashMapState state) {
+        blackhole.consume(state.linkedHashMap.get(randomElement()));
+        blackhole.consume(state.linkedHashMap.get(RandomString.create()));
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkTreeMap(TreeMapState state) {
-        Object included = state.treeMap.get(randomElement());
-        Object notIncluded = state.treeMap.get(RandomString.create());
+    public void benchmarkTreeMap(Blackhole blackhole, TreeMapState state) {
+        blackhole.consume(state.treeMap.get(randomElement()));
+        blackhole.consume(state.treeMap.get(RandomString.create()));
     }
 
     @Benchmark
     @OperationsPerInvocation(2)
-    public void benchmarkTreeSet(TreeSetState state) {
-        boolean included = state.treeSet.contains(randomElement());
-        boolean notIncluded = state.treeSet.contains(RandomString.create());
+    public void benchmarkTreeSet(Blackhole blackhole, TreeSetState state) {
+        blackhole.consume(state.treeSet.contains(randomElement()));
+        blackhole.consume(state.treeSet.contains(RandomString.create()));
     }
 }
