@@ -14,15 +14,17 @@ import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.github.johnnyjayjay.benchmarks.Global.ADD_OPS;
+import static com.github.johnnyjayjay.benchmarks.Global.*;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Measurement(batchSize = ADD_OPS)
+@BenchmarkMode(Mode.SingleShotTime)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(batchSize = ADD_OPS, iterations = ADD_WARMUP_ITER)
+@Measurement(batchSize = ADD_OPS, iterations = ADD_MEAS_ITER)
 public class KotlinAddition {
 
     private PersistentList<String> vector;

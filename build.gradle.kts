@@ -3,7 +3,7 @@ plugins {
     id("me.champeau.jmh") version "0.6.2"
 }
 
-group = "org.example"
+group = "com.github.johnnyjayjay"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -18,7 +18,7 @@ dependencies {
 }
 
 jmh {
-    this.includes.set(listOf("RandomStringBenchmark\\.allocateBench"))
+    this.includes.set(listOf("PCollectionsAddition\\..*"))
     fork.set(3)
     forceGC.set(true)
     resultFormat.set("csv")

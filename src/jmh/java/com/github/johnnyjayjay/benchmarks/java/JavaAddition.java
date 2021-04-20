@@ -13,6 +13,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,10 +25,13 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.johnnyjayjay.benchmarks.Global.*;
+
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Measurement(batchSize = Global.ADD_OPS)
+@BenchmarkMode(Mode.SingleShotTime)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(batchSize = ADD_OPS, iterations = ADD_WARMUP_ITER)
+@Measurement(batchSize = ADD_OPS, iterations = ADD_MEAS_ITER)
 public class JavaAddition {
 
     private ArrayList<String> arrayList;

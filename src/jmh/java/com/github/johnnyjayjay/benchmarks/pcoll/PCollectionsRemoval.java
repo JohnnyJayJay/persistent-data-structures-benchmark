@@ -10,6 +10,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.annotations.Warmup;
 import org.pcollections.ConsPStack;
 import org.pcollections.HashPMap;
 import org.pcollections.HashTreePBag;
@@ -26,9 +27,10 @@ import java.util.concurrent.TimeUnit;
 
 import static com.github.johnnyjayjay.benchmarks.Global.*;
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Measurement(batchSize = REMOVE_OPS)
+@BenchmarkMode(Mode.SingleShotTime)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(batchSize = REMOVE_OPS, iterations = REMOVE_WARMUP_ITER)
+@Measurement(batchSize = REMOVE_OPS, iterations = REMOVE_MEAS_ITER)
 public class PCollectionsRemoval {
 
     @State(Scope.Thread)

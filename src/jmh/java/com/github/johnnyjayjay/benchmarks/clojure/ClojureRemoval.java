@@ -22,6 +22,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,11 +30,11 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.johnnyjayjay.benchmarks.Global.*;
-import static com.github.johnnyjayjay.benchmarks.RandomString.*;
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Measurement(batchSize = REMOVE_OPS)
+@BenchmarkMode(Mode.SingleShotTime)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(batchSize = REMOVE_OPS, iterations = REMOVE_WARMUP_ITER)
+@Measurement(batchSize = REMOVE_OPS, iterations = REMOVE_MEAS_ITER)
 public class ClojureRemoval {
 
     @State(Scope.Thread)

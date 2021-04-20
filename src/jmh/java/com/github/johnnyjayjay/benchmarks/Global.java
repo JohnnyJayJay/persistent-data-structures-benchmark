@@ -6,6 +6,10 @@ public final class Global {
 
     public static final Random RANDOM = new Random();
 
+    public static final int ADD_MEAS_ITER = 10;
+    public static final int ADD_WARMUP_ITER = 5;
+    public static final int REMOVE_MEAS_ITER = 10;
+    public static final int REMOVE_WARMUP_ITER = 5;
     public static final int ADD_OPS = 1_000_000;
     public static final int REMOVE_OPS = 1_000_000;
     public static final int ELEMENTS_SIZE = 1_001_000;

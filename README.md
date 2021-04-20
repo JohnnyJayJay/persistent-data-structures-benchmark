@@ -42,8 +42,8 @@ Below you can see how many collections are benchmarked in each category for each
 
 | Benchmark/Subject Benchmark count | Java | PCollections | Kotlin | Clojure |                                     |
 | --------------------------------- | ---- | ------------ | ------ | ------- | ----------------------------------- |
-| Addition                          | 8    | 5            | 5      | 7       | 5 * 1M ops Warmup, 5 * 1M ops Measurement |
-| Removal                           | 8    | 5            | 5      | 6       | 5 * 1M ops Warmup, 5 * 1M ops Measurement  |
+| Addition                          | 8    | 5            | 5      | 7       | 5 * 1M ops Warmup, 10 * 1M ops Measurement |
+| Removal                           | 8    | 5            | 5      | 6       | 5 * 1M ops Warmup, 10 * 1M ops Measurement  |
 | Lookup                            | 8    | 5            | 5      | 7       | 5 * 10s Warmup, 3 * 10s Measurement |
 
 Here are all the collections that are benchmarked. Clojure is missing the removal benchmark for its `PersistentVector`, because it doesn't define an index-based removal operation.
