@@ -28,7 +28,6 @@ import static com.github.johnnyjayjay.benchmarks.Global.*;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Measurement(iterations = 3)
 public class JavaLookup {
 
     @State(Scope.Thread)

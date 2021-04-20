@@ -18,7 +18,7 @@ dependencies {
 }
 
 jmh {
-    this.includes.set(listOf("PCollectionsAddition\\..*"))
+    //this.includes.set(listOf("PCollectionsAddition\\..*"))
     fork.set(3)
     forceGC.set(true)
     resultFormat.set("csv")
