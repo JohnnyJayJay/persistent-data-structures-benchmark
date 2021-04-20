@@ -67,7 +67,8 @@ Here are all the collections that are benchmarked. Clojure is missing the remova
 
 - The lookup benchmarks lookup random elements/indices from a collection
 
-Every single benchmark is forked 3 times to make up for differences in VM configurations and other environmental factors.
+Every single benchmark is forked 3 times to make up for differences in VM configurations, randomness 
+and other environmental factors.
 
 ## How to run
 
