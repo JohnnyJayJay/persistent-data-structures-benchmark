@@ -38,6 +38,10 @@ import static com.github.johnnyjayjay.benchmarks.Global.*;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class ClojureLookup {
 
+    static {
+        ClojureFix.run();
+    }
+
     @State(Scope.Thread)
     public static class VectorState {
         IPersistentVector vector;

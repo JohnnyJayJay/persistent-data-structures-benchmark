@@ -37,6 +37,10 @@ import static com.github.johnnyjayjay.benchmarks.Global.*;
 @Measurement(batchSize = REMOVE_OPS, iterations = REMOVE_MEAS_ITER)
 public class ClojureRemoval {
 
+    static {
+        ClojureFix.run();
+    }
+
     @State(Scope.Thread)
     public static class ListState {
         IPersistentList list;
