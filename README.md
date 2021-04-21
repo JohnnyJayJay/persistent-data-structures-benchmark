@@ -6,7 +6,7 @@ A set of benchmarks comparing the performance of various operations from four di
 
 ## Goals
 
-The goal of these benchmarks is to compare **addition**, **removal** and **lookup** on different types of 
+The goal of these benchmarks is to compare the computational performance of **addition**, **removal** and **lookup** on different types of 
 persistent collections from three different JVM libraries/languages:
 
 - [clojure.lang](https://clojure.org/reference/data_structures#Collections) (Clojure)
@@ -16,11 +16,13 @@ persistent collections from three different JVM libraries/languages:
 Another goal is to see how persistent collections compare to the mutable
 [java.util Collections framework](https://docs.oracle.com/javase/tutorial/collections/intro/index.html).
 
+In summary, the goals are to
+- compare the computational performance of `add`-, `remove`- and `get`/`contains`-like methods of the persistent data structures implemented by Clojure, Kotlin and a third-party Java library
+-  compare the performance of persistent data structures to mutable data structures in the Java standard library
+
 ## Non-Goals
-
 First and most importantly:
-**This benchmark does not aim to determine what collections are ultimately better than others in general.**
-
+**This benchmark does not aim to determine what collections are ultimately better than others in general.**\
 It does not emulate a real-world-scenario, because the operations are each benchmarked individually. 
 In reality, most uses of collections involve addition, removal and lookup all at once and in a much 
 less concentrated fashion. Also, the size of the collections is a significant factor when it comes to speed, 
@@ -33,8 +35,16 @@ head/tail lookup on LinkedLists/queues/stacks).
 Thus, there are no benchmarks measuring the performance of random access 
 on non-random-access collections, for example.
 
+Moreover, memory use and efficiency are not measured.
+
 Lastly, the benchmarks do not cover every operation. For instance, Clojure's vectors and sorted maps 
 support a constant time reversing operation that is not included.
+
+In summary, it is **not** a goal to
+- ultimately determine what kinds of collections are generally better than others
+- claim applicability for every real-world scenario
+- benchmark "wrong" uses of collections (random access on a linked list, for example)
+- benchmark any sort of memory efficiency
 
 ## Structure
 
