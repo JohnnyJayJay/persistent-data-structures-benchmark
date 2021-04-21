@@ -1,5 +1,6 @@
 package com.github.johnnyjayjay.benchmarks.clojure;
 
+import clojure.java.api.Clojure;
 import clojure.lang.Associative;
 import clojure.lang.IPersistentCollection;
 import clojure.lang.PersistentHashMap;
@@ -33,6 +34,11 @@ import static com.github.johnnyjayjay.benchmarks.Global.*;
 @Warmup(batchSize = ADD_OPS, iterations = ADD_WARMUP_ITER)
 @Measurement(batchSize = ADD_OPS, iterations = ADD_MEAS_ITER)
 public class ClojureAddition {
+
+    static {
+        // I don't know why, but if I don't do this, Clojure has an error internally.
+        Clojure.var("clojure.core/*loaded-libs*");
+    }
 
     private IPersistentCollection vector;
     private IPersistentCollection list;
