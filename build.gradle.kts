@@ -19,6 +19,7 @@ dependencies {
 
 jmh {
     //this.includes.set(listOf("ClojureAddition.*"))
+    excludes.set(listOf("KotlinRemoval.benchmarkVector"))
     fork.set(3)
     forceGC.set(true)
     resultFormat.set("csv")
