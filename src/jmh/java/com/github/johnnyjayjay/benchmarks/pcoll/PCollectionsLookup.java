@@ -53,7 +53,10 @@ public class PCollectionsLookup {
 
         @Setup
         public void setUp() {
-            stack = ConsPStack.from(Arrays.asList(elements()));
+            stack = ConsPStack.empty();
+            for (String element : elements()) {
+                stack = stack.plus(element);
+            }
         }
 
         @TearDown

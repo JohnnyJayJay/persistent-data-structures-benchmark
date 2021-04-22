@@ -189,7 +189,7 @@ public class JavaRemoval {
 
     @Benchmark
     public void benchmarkArrayList(ArrayListState state) {
-        state.arrayList.remove(randomIndex());
+        state.arrayList.remove(randomIndex(state.arrayList.size()));
     }
 
     @Benchmark

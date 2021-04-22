@@ -54,7 +54,10 @@ public class PCollectionsRemoval {
 
         @Setup(Level.Iteration)
         public void setUp() {
-            stack = ConsPStack.from(Arrays.asList(elements()));
+            stack = ConsPStack.empty();
+            for (String element : elements()) {
+                stack = stack.plus(element);
+            }
             shuffleElements();
         }
 
@@ -127,7 +130,7 @@ public class PCollectionsRemoval {
 
     @Benchmark
     public void benchmarkVector(VectorState state) {
-        state.vector = state.vector.minus(randomIndex());
+        state.vector = state.vector.minus(randomIndex(state.vector.size()));
     }
 
     @Benchmark

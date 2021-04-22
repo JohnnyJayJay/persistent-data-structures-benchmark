@@ -41,6 +41,10 @@ public final class Global {
         return RANDOM.nextInt(ELEMENTS_SIZE);
     }
 
+    public static int randomIndex(int bound) {
+        return RANDOM.nextInt(bound);
+    }
+
     public static String randomElement() {
         return elements[randomIndex()];
     }

@@ -127,7 +127,7 @@ public class KotlinRemoval {
 
     @Benchmark
     public void benchmarkVector(VectorState state) {
-        state.vector = state.vector.removeAt(randomIndex());
+        state.vector = state.vector.removeAt(randomIndex(state.vector.size()));
     }
 
     @Benchmark
