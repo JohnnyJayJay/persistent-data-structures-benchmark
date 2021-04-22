@@ -110,7 +110,7 @@ public class KotlinLookup {
 
 
     @Benchmark
-    public String benchmarkArrayList(VectorState state) {
+    public String benchmarkVector(VectorState state) {
         return state.vector.get(randomIndex());
     }
 
