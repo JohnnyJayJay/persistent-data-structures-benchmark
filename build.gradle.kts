@@ -1,6 +1,6 @@
 plugins {
     java
-    id("me.champeau.jmh") version "0.6.2"
+    id("me.champeau.jmh") version "0.6.4"
 }
 
 group = "com.github.johnnyjayjay"
