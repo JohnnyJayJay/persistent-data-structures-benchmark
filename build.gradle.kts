@@ -18,7 +18,7 @@ dependencies {
 }
 
 jmh {
-    this.includes.set(listOf("ClojureAddition.*"))
+    //this.includes.set(listOf("ClojureAddition.*"))
     fork.set(3)
     forceGC.set(true)
     resultFormat.set("csv")
