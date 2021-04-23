@@ -91,3 +91,6 @@ $ ./gradlew jmh
 ```
 
 ## Results
+
+## Contributions
+Whether you find an issue in the benchmark code, want to improve the default settings or simply want to submit your own benchmark results: Feel free to open an issue or a pull request! The more people work on benchmarks like this, the more useful their results become.
