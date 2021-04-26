@@ -92,18 +92,5 @@ $ ./gradlew jmh
 
 ## Results
 
-| Data Structure/Library Equivalent   | Java            | PCollections   | Kotlin                 | Clojure             |
-| ----------------------------------- | --------------- | -------------- | ---------------------- | ------------------- |
-| Random Access List                  | `ArrayList`     | `TreePVector`  | `PersistentVector`     | `PersistentVector`  |
-| Queue (FIFO)                        | `LinkedList`    | -              | -                      | `PersistentQueue`   |
-| Stack (LIFO)                        | `LinkedList`    | `ConsPStack`   | -                      | `PersistentList`    |
-| Unordered Set                       | `HashSet`       | `HashTreePSet` | `PersistentHashSet`    | `PersistentHashSet` |
-| Unordered Map                       | `HashMap`       | `HashTreePMap` | `PersistentHashMap`    | `PersistentHashMap` |
-| Linked Set (entry order)            | `LinkedHashSet` | -              | `PersistentOrderedSet` | -                   |
-| Linked Map (entry order)            | `LinkedHashMap` | -              | `PersistentOrderedMap` | -                   |
-| Sorted Set                          | `TreeSet`       | -              | -                      | `PersistentTreeSet` |
-| Sorted Map                          | `TreeMap`       | -              | -                      | `PersistentTreeMap` |
-| Bag (unordered, duplicate elements) | -               | `HashTreePBag` | -                      | -                   |
-
 ## Contributions
 Whether you find an issue in the benchmark code, want to improve the default settings or simply want to submit your own benchmark results: Feel free to open an issue or a pull request! The more people work on benchmarks like this, the more useful their results become.
