@@ -91,6 +91,34 @@ $ ./gradlew jmh
 ```
 
 ## Results
+Many thanks to those who provided their computing power to run these benchmarks for my initial evaluation:
+
+- [Kaliber's results](./plot/results_kali.csv) (Ryzen 5 3600X, 16GB DDR4-3200)
+- [PiggyPiglet's results](./plot/results_piglet.csv) (i7-7700K, 32GB DDR4-3200)
+- [BomBardyGamer's results](./plot/results_bardy.csv) (Ryzen 7 3700X, ...)
+
+The above results mostly match up and show similar patterns. Here is a simplified view of PiggyPiglet's results:
+
+![Results as a graph](./plot/plot_piglet.png)
+
+This graph only shows the 4 most common data types in all 4 libraries:
+
+- `List` (random access list - included because it is the de facto default data structure for most applications)
+- `Stack` (aka cons, list - included because it is the simplest persistent data structure)
+- `Set` (unordered set)
+- `Map` (unordered map)
+
+Lower scores are better, as they indicate execution time.
+
+There are a couple of additional things to note about this data:
+
+- Kotlin does not provide a persistent stack implementation or similar, thus there is no data in those areas.
+- For the "List removal" benchmark, only PCollection results are available, because:
+  - Clojure does not have indexed-based removal on its vectors
+  - Java is too big of an outlier, taking around 20 seconds to remove 1M elements
+  - Kotlin is an even bigger outlier, in this case taking over 200 seconds. In the other results, it did not even terminate without timing out.
+- The black lines on top of the bars show the 99.9% error relative to the measurement result
+- While it is hard to make out, there are indeed removal and lookup results for Stacks. They just happen to be very efficient in those cases, to an extent where the difference between the tested libraries almost becomes insignificant.
 
 ## Contributions
 Whether you find an issue in the benchmark code, want to improve the default settings or simply want to submit your own benchmark results: Feel free to open an issue or a pull request! The more people work on benchmarks like this, the more useful their results become.
