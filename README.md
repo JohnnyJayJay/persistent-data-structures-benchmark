@@ -16,35 +16,41 @@ persistent collections from three different JVM libraries/languages:
 Another goal is to see how persistent collections compare to the mutable
 [java.util Collections framework](https://docs.oracle.com/javase/tutorial/collections/intro/index.html).
 
-In summary, the goals are to
-- compare the computational performance of `add`-, `remove`- and `get`/`contains`-like methods of the persistent data structures implemented by Clojure, Kotlin and a third-party Java library
--  compare the performance of persistent data structures to mutable data structures in the Java standard library
-
 ## Non-Goals
-First and most importantly:
+### Claiming Authority
 **This benchmark does not aim to determine what collections are ultimately better than others in general.**\
 It does not emulate a real-world-scenario, because the operations are each benchmarked individually. 
 In reality, most uses of collections involve addition, removal and lookup all at once and in a much 
 less concentrated fashion. Also, the size of the collections is a significant factor when it comes to speed, 
 so there may be notable differences in results when focusing more on collections of different sizes.
 
-Furthermore, this benchmark only considers the ways these collections are *supposed to be* used, i.e.,
+### Benchmarking Undesirable Operations
+This benchmark only considers the ways these collections are *supposed to be* used, i.e.,
 it examines the performance of the operations the respective collections were built and optimised for 
 (e.g. value-/key-based lookup on sets/maps, random access on vectors/arraylists, 
 head/tail lookup on LinkedLists/queues/stacks).
 Thus, there are no benchmarks measuring the performance of random access 
 on non-random-access collections, for example.
 
-Moreover, memory use and efficiency are not measured.
+### Benchmarking Memory Efficiency
+Memory use and efficiency are not measured.
 
+### Examining Concurrent Contexts
+The benchmarks all run on a single thread and do not make a statement about performance in multi-threaded contexts. The reason for this decision are that
+
+1. Writing correct concurrent code is hard, writing meaningful concurrent benchmarks is harder
+2. It is unclear how to compare Java's mutable collections to the persistent ones. Do we use locks for Java and atomic references for the others? 
+If so, does that accurately represent the way we write concurrent code and to which extent is that still comparable?
+
+### Comparing Collections of Different Types
+The benchmark results are generally *not* suitable to compare different types of collections (e.g. Lists and Sets). The reason for that is that the benchmarks may work differently:
+For example, In the Set lookup benchmarks, there is the additional overhead of creating random strings to measure lookup of nonexistent elements, while this is not done for lists
+and therefore may result in a significant difference.\
+The random string creation method is benchmarked independently if you want to get a vague impression nonetheless.
+
+### Benchmarking all Available Operations
 Lastly, the benchmarks do not cover every operation. For instance, Clojure's vectors and sorted maps 
 support a constant time reversing operation that is not included.
-
-In summary, it is **not** a goal to
-- ultimately determine what kinds of collections are generally better than others
-- claim applicability for every real-world scenario
-- benchmark "wrong" uses of collections (random access on a linked list, for example)
-- benchmark any sort of memory efficiency
 
 ## Structure
 
